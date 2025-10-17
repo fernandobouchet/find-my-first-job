@@ -1,12 +1,14 @@
 "use client";
 
 import { JobCard } from "@/components/job-card";
-import { TrendingUp } from "lucide-react";
+import { Calendar, TrendingUp } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { fetchTodayJobs } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Job } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -34,7 +36,6 @@ export default function Home() {
               profesionales en inicio de carrera.
             </p>
           </section>
-
           {jobs.length > 0 && (
             <section className="space-y-6">
               <div className="flex items-center gap-3">
@@ -55,7 +56,6 @@ export default function Home() {
               </div>
             </section>
           )}
-
           {jobs.length <= 0 && (
             <div className="text-center py-12 space-y-4">
               <p className="text-muted-foreground">
@@ -63,6 +63,12 @@ export default function Home() {
               </p>
             </div>
           )}
+          <Link href="/prev_jobs">
+            <Button size="lg" className="gap-2">
+              <Calendar className="h-4 w-4" />
+              Ver Empleos Anteriores
+            </Button>
+          </Link>
         </div>
       </main>
       <Footer />
