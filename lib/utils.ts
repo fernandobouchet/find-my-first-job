@@ -12,7 +12,7 @@ export const fetchTodayJobs = async () => {
   let data: Job[] = [];
 
   try {
-    const response = await fetch(GITHUB_RAW_URL + "/today_jobs.json");
+    const response = await fetch(GITHUB_RAW_URL + "/latest_jobs.json");
 
     if (!response.ok) {
       throw new Error(
