@@ -30,7 +30,7 @@ export default function Page() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold">
-                  Empleos publicados recientemente
+                  {jobs.length} Empleos publicados recientemente
                 </h2>
               </div>
             </div>
@@ -48,10 +48,10 @@ export default function Page() {
             </p>
           </div>
         )}
+        <Link href="/">
+          <Button size="lg">Volver al inicio</Button>
+        </Link>
       </div>
-      <Link href="/">
-        <Button variant="outline">Volver al inicio</Button>
-      </Link>
     </main>
   );
 }

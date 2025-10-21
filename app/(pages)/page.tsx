@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Job } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -24,13 +25,16 @@ export default function Home() {
       <div className="space-y-12">
         <section className="text-center space-y-4 py-8">
           <h2 className="text-4xl font-bold text-balance">
-            Encuentra tu Primer Empleo en Tech
+            Encuentra tu Primer Empleo en IT
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Descubre oportunidades para desarrolladores junior, trainees y
-            pasantes. Todas las posiciones están seleccionadas para
-            profesionales en inicio de carrera.
+            Descubre oportunidades para desarrolladores junior y trainee. Todas
+            las posiciones están seleccionadas para profesionales en inicio de
+            carrera.
           </p>
+          <Badge variant="outline" className="text-sm mx-auto w-fit">
+            🇦🇷 Empleos curados para Buenos Aires, Argentina
+          </Badge>
         </section>
         {jobs.length > 0 && (
           <section className="space-y-6">
