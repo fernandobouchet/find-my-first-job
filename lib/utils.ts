@@ -27,7 +27,10 @@ export const fetchTodayJobs = async () => {
     console.error("Fallo al obtener el JSON de GitHub:", message);
   }
 
-  return data;
+  return data.map((job: Job) => {
+    const formatted = formatDate(job.published_at);
+    return { ...job, published_at: formatted };
+  });
 };
 
 export const fetchPrevJobs = async () => {
@@ -57,5 +60,19 @@ export const fetchPrevJobs = async () => {
     console.error("Fallo al obtener los JSON de GitHub:", message);
   }
 
-  return data;
+  return data.map((job: Job) => {
+    const formatted = formatDate(job.published_at);
+    return { ...job, published_at: formatted };
+  });
+};
+
+export const formatDate = (published_at: string) => {
+  const date = new Date(published_at);
+  const formatted = `${date.getDate().toString().padStart(2, "0")}/${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}/${date.getFullYear().toString().slice(-2)}`;
+
+  return formatted;
 };
