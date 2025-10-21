@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Clock, ExternalLink } from "lucide-react";
+import { Briefcase, CircleDollarSign, Clock, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 interface JobCardProps {
@@ -32,7 +32,7 @@ export function JobCard({ job }: JobCardProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+        <div className="flex flex-wrap justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <Briefcase className="h-4 w-4" />
             <span>{job.modality}</span>
@@ -44,7 +44,10 @@ export function JobCard({ job }: JobCardProps) {
         </div>
 
         {job.salary && (
-          <div className="text-sm font-medium text-accent">{job.salary}</div>
+          <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+            <CircleDollarSign className="h-4 w-4" />
+            <span>{job.salary}</span>
+          </div>
         )}
 
         <p className="text-sm text-muted-foreground line-clamp-3">

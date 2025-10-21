@@ -1,5 +1,7 @@
-import { Briefcase } from "lucide-react";
+import { Briefcase, Calendar } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 const Header = () => {
   return (
@@ -19,7 +21,15 @@ const Header = () => {
               </p>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex gap-4 items-center">
+            <Link href="/prev_jobs">
+              <Button size="sm" className="gap-2">
+                <Calendar className="h-4 w-4" />
+                Ver Empleos Anteriores
+              </Button>
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>
