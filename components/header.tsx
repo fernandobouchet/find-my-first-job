@@ -1,4 +1,5 @@
 import { Briefcase } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 const Header = () => {
   return (
@@ -18,6 +19,7 @@ const Header = () => {
               </p>
             </div>
           </div>
+          <ThemeToggle />
         </div>
       </div>
     </header>
