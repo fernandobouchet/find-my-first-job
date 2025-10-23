@@ -68,8 +68,8 @@ export function JobCard({ job }: JobCardProps) {
         </div>
       </CardContent>
       <CardFooter className="mt-auto">
-        <Link href={job.url} target="_blank" className="w-full cursor-pointer">
-          <Button className="w-full" variant="outline">
+        <Link href={job.url} target="_blank" className="w-full">
+          <Button className="w-full cursor-pointer" variant="outline">
             Ver detalles en {job.source}
             <ExternalLink className="ml-2 h-4 w-4" />
           </Button>

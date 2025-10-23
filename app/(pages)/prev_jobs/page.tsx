@@ -3,7 +3,7 @@
 import { JobCard } from "@/components/job-card";
 import { Button } from "@/components/ui/button";
 import { Job } from "@/lib/types";
-import { fetchPrevJobs } from "@/lib/utils";
+import { getJobs } from "@/services/jobs";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ export default function Page() {
 
   useEffect(() => {
     async function getPrevJobs() {
-      const response = await fetchPrevJobs();
+      const response = await getJobs();
       setJobs(response);
     }
     getPrevJobs();

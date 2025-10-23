@@ -2,19 +2,19 @@
 
 import { JobCard } from "@/components/job-card";
 import { Calendar, TrendingUp } from "lucide-react";
-import { fetchTodayJobs } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Job } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { getJobs } from "@/services/jobs";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
     async function getTodayJobs() {
-      const response = await fetchTodayJobs();
+      const response = await getJobs();
       setJobs(response);
     }
     getTodayJobs();
