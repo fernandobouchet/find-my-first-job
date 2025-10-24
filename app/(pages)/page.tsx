@@ -7,17 +7,17 @@ import { Job } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { getJobs } from "@/services/jobs";
+import { getTodayJobs } from "@/services/jobs";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
-    async function getTodayJobs() {
-      const response = await getJobs();
+    async function getJobs() {
+      const response = await getTodayJobs();
       setJobs(response);
     }
-    getTodayJobs();
+    getJobs();
   }, []);
 
   return (

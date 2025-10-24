@@ -4,7 +4,8 @@ import { getFirestore } from "firebase/firestore";
 
 const db = getFirestore(app);
 
-const jobsCollection = collection(db, "jobs");
+const todayJobsCollection = collection(db, "jobs_today");
+const jobsCollection = collection(db, "jobs_previous");
 const trendsCollection = collection(db, "trends");
 
-export { jobsCollection, trendsCollection };
+export { todayJobsCollection, jobsCollection, trendsCollection };
