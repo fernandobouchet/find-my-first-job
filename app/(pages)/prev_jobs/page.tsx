@@ -1,6 +1,6 @@
 "use client";
 
-import { JobCard } from "@/components/job-card";
+import { JobPagination } from "@/components/job-pagination";
 import { Button } from "@/components/ui/button";
 import { Job } from "@/lib/types";
 import { getOldJobs } from "@/services/jobs";
@@ -34,23 +34,19 @@ export default function Page() {
                 </h2>
               </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {jobs?.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
+            <JobPagination jobs={jobs} />
           </section>
         )}
         {jobs.length <= 0 && (
           <div className="text-center py-12 space-y-4">
-            <p className="text-muted-foreground">
-              No hay nuevos empleos publicados hoy. ¡Vuelve mañana!
-            </p>
+            <p className="text-muted-foreground">No hay empleos anteriores.</p>
           </div>
         )}
-        <Link href="/">
-          <Button size="lg">Volver al inicio</Button>
-        </Link>
+        <div className="flex justify-center w-full">
+          <Link href="/">
+            <Button size="lg">Volver al inicio</Button>
+          </Link>
+        </div>
       </div>
     </main>
   );

@@ -19,6 +19,7 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
+  console.log(job);
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -55,14 +56,20 @@ export function JobCard({ job }: JobCardProps) {
         </p>
 
         <div className="flex flex-wrap gap-2">
-          {job.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs">
-              {tag}
-            </Badge>
-          ))}
-          {job.tags.length > 3 && (
+          {Object.values(job.tags ?? {})
+            .flatMap((tags) => tags ?? [])
+            .slice(0, 3)
+            .map((tag) => (
+              <Badge key={tag} variant="secondary" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+          {Object.values(job.tags ?? {}).flatMap((tags) => tags ?? []).length >
+            3 && (
             <Badge variant="outline" className="text-xs">
-              +{job.tags.length - 3}
+              +
+              {Object.values(job.tags ?? {}).flatMap((tags) => tags ?? [])
+                .length - 3}
             </Badge>
           )}
         </div>

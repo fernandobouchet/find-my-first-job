@@ -1,6 +1,5 @@
 "use client";
 
-import { JobCard } from "@/components/job-card";
 import { Calendar, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Job } from "@/lib/types";
@@ -8,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { getTodayJobs } from "@/services/jobs";
+import { JobPagination } from "@/components/job-pagination";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -33,7 +33,7 @@ export default function Home() {
             carrera.
           </p>
           <Badge variant="outline" className="text-sm mx-auto w-fit">
-            🇦🇷 Empleos curados para Buenos Aires, Argentina
+            🇦🇷 Buenos Aires (local/remoto) • 🌎 Remoto Global
           </Badge>
         </section>
         {jobs.length > 0 && (
@@ -49,11 +49,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {jobs?.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
+            <JobPagination jobs={jobs} />
           </section>
         )}
         {jobs.length <= 0 && (
@@ -63,12 +59,14 @@ export default function Home() {
             </p>
           </div>
         )}
-        <Link href="/prev_jobs">
-          <Button size="lg" className="gap-2">
-            <Calendar className="h-4 w-4" />
-            Ver Empleos Anteriores
-          </Button>
-        </Link>
+        <div className="flex justify-center w-full">
+          <Link href="/prev_jobs">
+            <Button size="lg" className="gap-2">
+              <Calendar className="h-4 w-4" />
+              Ver Empleos Anteriores
+            </Button>
+          </Link>
+        </div>
       </div>
     </main>
   );
