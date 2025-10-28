@@ -1,10 +1,8 @@
 "use client";
 
-import { Calendar, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Job } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { getTodayJobs } from "@/services/jobs";
 import { JobPagination } from "@/components/job-pagination";
@@ -15,6 +13,7 @@ export default function Home() {
   useEffect(() => {
     async function getJobs() {
       const response = await getTodayJobs();
+      response.filter((job) => job.published_at);
       setJobs(response);
     }
     getJobs();
@@ -59,14 +58,6 @@ export default function Home() {
             </p>
           </div>
         )}
-        <div className="flex justify-center w-full">
-          <Link href="/prev_jobs">
-            <Button size="lg" className="gap-2">
-              <Calendar className="h-4 w-4" />
-              Ver Empleos Anteriores
-            </Button>
-          </Link>
-        </div>
       </div>
     </main>
   );

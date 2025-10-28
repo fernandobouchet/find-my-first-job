@@ -1,11 +1,9 @@
 "use client";
 
 import { JobPagination } from "@/components/job-pagination";
-import { Button } from "@/components/ui/button";
 import { Job } from "@/lib/types";
 import { getOldJobs } from "@/services/jobs";
 import { Calendar } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -30,7 +28,7 @@ export default function Page() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold">
-                  {jobs.length} Empleos publicados recientemente
+                  {jobs.length} Empleos encontrados en los últimos 30 días
                 </h2>
               </div>
             </div>
@@ -42,11 +40,6 @@ export default function Page() {
             <p className="text-muted-foreground">No hay empleos anteriores.</p>
           </div>
         )}
-        <div className="flex justify-center w-full">
-          <Link href="/">
-            <Button size="lg">Volver al inicio</Button>
-          </Link>
-        </div>
       </div>
     </main>
   );
