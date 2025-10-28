@@ -83,7 +83,9 @@ const JobPagination = ({ jobs }: Props) => {
                       currentPage > 1 && handlePageChange(currentPage - 1)
                     }
                     className={
-                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                      currentPage === 1
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
                     }
                   />
                 </PaginationItem>
@@ -96,6 +98,7 @@ const JobPagination = ({ jobs }: Props) => {
                       <PaginationLink
                         onClick={() => handlePageChange(page as number)}
                         isActive={currentPage === page}
+                        className="cursor-pointer"
                       >
                         {page}
                       </PaginationLink>
@@ -112,7 +115,7 @@ const JobPagination = ({ jobs }: Props) => {
                     className={
                       currentPage === totalPages
                         ? "pointer-events-none opacity-50"
-                        : ""
+                        : "cursor-pointer"
                     }
                   />
                 </PaginationItem>
