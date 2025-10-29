@@ -18,29 +18,27 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <div>
-        {jobs.length > 0 && (
-          <section className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Calendar className="h-5 w-5" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold">
-                  {jobs.length} Empleos encontrados en los últimos 30 días
-                </h2>
-              </div>
+    <div>
+      {jobs.length > 0 && (
+        <section className="space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Calendar className="h-5 w-5" />
             </div>
-            <JobPagination jobs={jobs} />
-          </section>
-        )}
-        {jobs.length <= 0 && (
-          <div className="text-center py-12 space-y-4">
-            <p className="text-muted-foreground">No hay empleos anteriores.</p>
+            <div>
+              <h2 className="text-2xl font-bold">
+                {jobs.length} Empleos encontrados en los últimos 30 días
+              </h2>
+            </div>
           </div>
-        )}
-      </div>
-    </main>
+          <JobPagination jobs={jobs} />
+        </section>
+      )}
+      {jobs.length <= 0 && (
+        <div className="text-center py-12 space-y-4">
+          <p className="text-muted-foreground">No hay empleos anteriores.</p>
+        </div>
+      )}
+    </div>
   );
 }

@@ -9,7 +9,9 @@ const MainLayout = ({
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      {children}
+      <main className="min-h-screen container mx-auto px-4 py-8">
+        {children}
+      </main>
       <Footer />
     </div>
   );
