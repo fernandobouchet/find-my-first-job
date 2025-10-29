@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Pagination,
@@ -66,69 +68,58 @@ const JobPagination = ({ jobs }: Props) => {
 
   return (
     <div>
-      {currentJobs.length > 0 ? (
-        <>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {currentJobs.map((job) => (
-              <JobCard key={job.id} job={job} />
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {currentJobs.map((job) => (
+          <JobCard key={job.id} job={job} />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <Pagination className="pt-8">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                className={
+                  currentPage === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+
+            {getPageNumbers().map((page, index) => (
+              <PaginationItem key={index}>
+                {page === "ellipsis" ? (
+                  <PaginationEllipsis />
+                ) : (
+                  <PaginationLink
+                    onClick={() => handlePageChange(page as number)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                )}
+              </PaginationItem>
             ))}
-          </div>
 
-          {totalPages > 1 && (
-            <Pagination className="pt-8">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    onClick={() =>
-                      currentPage > 1 && handlePageChange(currentPage - 1)
-                    }
-                    className={
-                      currentPage === 1
-                        ? "pointer-events-none opacity-50"
-                        : "cursor-pointer"
-                    }
-                  />
-                </PaginationItem>
-
-                {getPageNumbers().map((page, index) => (
-                  <PaginationItem key={index}>
-                    {page === "ellipsis" ? (
-                      <PaginationEllipsis />
-                    ) : (
-                      <PaginationLink
-                        onClick={() => handlePageChange(page as number)}
-                        isActive={currentPage === page}
-                        className="cursor-pointer"
-                      >
-                        {page}
-                      </PaginationLink>
-                    )}
-                  </PaginationItem>
-                ))}
-
-                <PaginationItem>
-                  <PaginationNext
-                    onClick={() =>
-                      currentPage < totalPages &&
-                      handlePageChange(currentPage + 1)
-                    }
-                    className={
-                      currentPage === totalPages
-                        ? "pointer-events-none opacity-50"
-                        : "cursor-pointer"
-                    }
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )}
-        </>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            No hay empleos archivados disponibles.
-          </p>
-        </div>
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  currentPage < totalPages && handlePageChange(currentPage + 1)
+                }
+                className={
+                  currentPage === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       )}
     </div>
   );

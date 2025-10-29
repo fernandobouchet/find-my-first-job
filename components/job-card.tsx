@@ -1,5 +1,3 @@
-"use client";
-
 import type { Job } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -19,7 +17,6 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
-  console.log(job);
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -58,18 +55,18 @@ export function JobCard({ job }: JobCardProps) {
         <div className="flex flex-wrap gap-2">
           {Object.values(job.tags ?? {})
             .flatMap((tags) => tags ?? [])
-            .slice(0, 3)
+            .slice(0, 4)
             .map((tag) => (
               <Badge key={tag} variant="secondary" className="text-xs">
                 {tag}
               </Badge>
             ))}
           {Object.values(job.tags ?? {}).flatMap((tags) => tags ?? []).length >
-            3 && (
+            4 && (
             <Badge variant="outline" className="text-xs">
               +
               {Object.values(job.tags ?? {}).flatMap((tags) => tags ?? [])
-                .length - 3}
+                .length - 4}
             </Badge>
           )}
         </div>
