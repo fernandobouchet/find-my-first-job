@@ -34,13 +34,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Job } from "@/lib/types";
+import { ScoredJob } from "@/lib/types";
+import { AdminJobDetailModal } from "./admin-job-detail";
 
-export const columns: ColumnDef<Job>[] = [
+export const getColumns = (
+  handleViewDetails: (job: ScoredJob) => void
+): ColumnDef<ScoredJob>[] => [
   {
     accessorKey: "published_at",
-    header: "Fecha Publicación",
+    header: "Fecha",
     cell: ({ row }) => <div>{row.getValue("published_at")}</div>,
+  },
+  {
+    accessorKey: "title",
+    header: () => {
+      return <div>Título</div>;
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("title")}</div>,
   },
   {
     accessorKey: "source",
@@ -60,13 +70,6 @@ export const columns: ColumnDef<Job>[] = [
     ),
   },
   {
-    accessorKey: "title",
-    header: () => {
-      return <div>Título</div>;
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("title")}</div>,
-  },
-  {
     accessorKey: "score",
     header: ({ column }) => {
       return (
@@ -74,7 +77,7 @@ export const columns: ColumnDef<Job>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Calificación
+          Puntuación
           <ArrowUpDown />
         </Button>
       );
@@ -83,6 +86,14 @@ export const columns: ColumnDef<Job>[] = [
       <div className="lowercase">
         {!Number.isNaN(row.getValue("score")) ? row.getValue("score") : "-"}
       </div>
+    ),
+  },
+  {
+    accessorFn: (row) => row.score_details?.quality_tier,
+    id: "quality_tier",
+    header: "Calificación",
+    cell: ({ getValue }) => (
+      <div className="lowercase">{String(getValue() ?? "-")}</div>
     ),
   },
   {
@@ -107,7 +118,9 @@ export const columns: ColumnDef<Job>[] = [
               Copiar ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Ver detalles</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleViewDetails(job)}>
+              Ver detalles
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -116,7 +129,7 @@ export const columns: ColumnDef<Job>[] = [
 ];
 
 interface Props {
-  jobs: Job[];
+  jobs: ScoredJob[];
 }
 
 export function JobsTable({ jobs }: Props) {
@@ -125,9 +138,17 @@ export function JobsTable({ jobs }: Props) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const [selectedJob, setSelectedJob] = useState<ScoredJob | null>(null);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+
+  const handleViewDetails = (job: ScoredJob) => {
+    setSelectedJob(job);
+    setDetailModalOpen(true);
+  };
+
   const table = useReactTable({
     data: jobs,
-    columns,
+    columns: getColumns(handleViewDetails),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -222,7 +243,7 @@ export function JobsTable({ jobs }: Props) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={getColumns.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -256,6 +277,11 @@ export function JobsTable({ jobs }: Props) {
           </Button>
         </div>
       </div>
+      <AdminJobDetailModal
+        job={selectedJob}
+        open={detailModalOpen}
+        onOpenChange={setDetailModalOpen}
+      />
     </div>
   );
 }

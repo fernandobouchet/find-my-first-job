@@ -4,7 +4,7 @@ import {
   jobsCollection,
   rejectedJobsCollection,
 } from "@/lib/firebase/firestore";
-import { Job } from "@/lib/types";
+import { Job, ScoredJob } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
 const getTodayJobs = async (): Promise<Job[]> => {
@@ -51,7 +51,7 @@ const getOldJobs = async (): Promise<Job[]> => {
   return jobList as Job[];
 };
 
-const getRejectedJobs = async (): Promise<Job[]> => {
+const getRejectedJobs = async (): Promise<ScoredJob[]> => {
   const q = query(rejectedJobsCollection, orderBy("published_at", "desc"));
 
   const querySnapshot = await getDocs(q);
@@ -70,7 +70,7 @@ const getRejectedJobs = async (): Promise<Job[]> => {
     };
   });
 
-  return jobList as Job[];
+  return jobList as ScoredJob[];
 };
 
 export { getTodayJobs, getOldJobs, getRejectedJobs };
