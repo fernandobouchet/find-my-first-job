@@ -1,26 +1,13 @@
-"use client";
-
 import { TrendingUp } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Job } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { getTodayJobs } from "@/services/jobs";
 import { JobPagination } from "@/components/job-pagination";
 
-export default function Home() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-
-  useEffect(() => {
-    async function getJobs() {
-      const response = await getTodayJobs();
-      response.filter((job) => job.published_at);
-      setJobs(response);
-    }
-    getJobs();
-  }, []);
+export default async function Home() {
+  const jobs = await getTodayJobs();
 
   return (
-    <div className="space-y-12">
+    <>
       <section className="text-center space-y-4 py-8">
         <h2 className="text-4xl font-bold text-balance">
           Encuentra tu Primer Empleo en IT
@@ -57,6 +44,6 @@ export default function Home() {
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 }

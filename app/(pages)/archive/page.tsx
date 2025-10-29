@@ -1,21 +1,9 @@
-"use client";
-
 import { JobPagination } from "@/components/job-pagination";
-import { Job } from "@/lib/types";
 import { getOldJobs } from "@/services/jobs";
 import { Calendar } from "lucide-react";
-import { useEffect, useState } from "react";
 
-export default function Page() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-
-  useEffect(() => {
-    async function getPrevJobs() {
-      const response = await getOldJobs();
-      setJobs(response);
-    }
-    getPrevJobs();
-  }, []);
+export default async function Page() {
+  const jobs = await getOldJobs();
 
   return (
     <div>
