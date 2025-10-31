@@ -2,7 +2,7 @@
 
 import { JobsTable } from "@/components/jobs-table";
 import { ScoredJob } from "@/lib/types";
-import { getRejectedJobs } from "@/services/jobs";
+import { getAllJobs } from "@/services/jobs";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -10,7 +10,7 @@ export default function Page() {
 
   useEffect(() => {
     async function getPrevJobs() {
-      const response = await getRejectedJobs();
+      const response = await getAllJobs();
       setJobs(response);
     }
     getPrevJobs();

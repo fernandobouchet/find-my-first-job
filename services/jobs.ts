@@ -1,76 +1,76 @@
-import { getDocs, orderBy, query } from "firebase/firestore";
 import {
-  todayJobsCollection,
-  jobsCollection,
-  rejectedJobsCollection,
-} from "@/lib/firebase/firestore";
+  CollectionReference,
+  DocumentData,
+  getDocs,
+  orderBy,
+  query,
+  QueryConstraint,
+  where,
+  WhereFilterOp,
+} from "firebase/firestore";
+import { jobsCollection } from "@/lib/firebase/firestore";
 import { Job, ScoredJob } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
-const getTodayJobs = async (): Promise<Job[]> => {
-  const q = query(todayJobsCollection, orderBy("published_at", "desc"));
+const parseFirestoreDate = (date: DocumentData[string]): Date => {
+  if (date?.toDate) return date.toDate();
+  return new Date(date);
+};
 
-  const querySnapshot = await getDocs(q);
+const getJobs = async <T>(
+  collectionRef: CollectionReference,
+  whereConditions: [string, WhereFilterOp, string | Date | string[]][] = []
+): Promise<T[]> => {
+  const constraints: QueryConstraint[] = whereConditions.map((cond) =>
+    where(...cond)
+  );
+  constraints.push(orderBy("published_at", "desc"));
 
-  const jobList = querySnapshot.docs.map((doc) => {
+  const q = query(collectionRef, ...constraints);
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((doc) => {
     const data = doc.data();
-
-    const publishedAt = data.published_at?.toDate
-      ? data.published_at.toDate()
-      : new Date(data.published_at);
-
+    const publishedAt = parseFirestoreDate(data.published_at);
     return {
       id: doc.id,
       ...data,
       published_at: formatDate(publishedAt.toISOString()),
-    };
+    } as T;
   });
-
-  return jobList as Job[];
 };
 
-const getOldJobs = async (): Promise<Job[]> => {
-  const q = query(jobsCollection, orderBy("published_at", "desc"));
+const getDateXDaysAgo = (daysAgo: number, timezoneOffset = -3): Date => {
+  const now = new Date();
+  const utcYear = now.getUTCFullYear();
+  const utcMonth = now.getUTCMonth();
+  const utcDate = now.getUTCDate();
 
-  const querySnapshot = await getDocs(q);
-
-  const jobList = querySnapshot.docs.map((doc) => {
-    const data = doc.data();
-
-    const publishedAt = data.published_at?.toDate
-      ? data.published_at.toDate()
-      : new Date(data.published_at);
-
-    return {
-      id: doc.id,
-      ...data,
-      published_at: formatDate(publishedAt.toISOString()),
-    };
-  });
-
-  return jobList as Job[];
+  const targetDate = new Date(
+    utcYear,
+    utcMonth,
+    utcDate - daysAgo,
+    0 - timezoneOffset,
+    0,
+    0,
+    0
+  );
+  return targetDate;
 };
 
-const getRejectedJobs = async (): Promise<ScoredJob[]> => {
-  const q = query(rejectedJobsCollection, orderBy("published_at", "desc"));
+const getTodayJobs = () =>
+  getJobs<Job>(jobsCollection, [
+    ["score_details.quality_tier", "in", ["excellent", "good"]],
+    ["published_at", ">=", getDateXDaysAgo(0)],
+    ["published_at", "<", getDateXDaysAgo(-1)],
+  ]);
 
-  const querySnapshot = await getDocs(q);
+const getOldJobs = () =>
+  getJobs<Job>(jobsCollection, [
+    ["score_details.quality_tier", "in", ["excellent", "good"]],
+    ["published_at", "<", getDateXDaysAgo(-7)],
+  ]);
 
-  const jobList = querySnapshot.docs.map((doc) => {
-    const data = doc.data();
+const getAllJobs = () => getJobs<ScoredJob>(jobsCollection);
 
-    const publishedAt = data.published_at?.toDate
-      ? data.published_at.toDate()
-      : new Date(data.published_at);
-
-    return {
-      id: doc.id,
-      ...data,
-      published_at: formatDate(publishedAt.toISOString()),
-    };
-  });
-
-  return jobList as ScoredJob[];
-};
-
-export { getTodayJobs, getOldJobs, getRejectedJobs };
+export { getTodayJobs, getOldJobs, getAllJobs };
