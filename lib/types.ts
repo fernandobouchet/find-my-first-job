@@ -1,14 +1,6 @@
 export type JobModality = "On-site" | "Hybrid" | "Remote" | "Not Specified";
 
-export type TagCategory =
-  | "roles"
-  | "languages"
-  | "frameworks"
-  | "data_tools"
-  | "design_tools"
-  | "cloud_devops"
-  | "databases"
-  | "methodologies";
+export type TagCategory = "roles" | "languages" | "frameworks";
 
 export type JobTags = Partial<Record<TagCategory, string[]>>;
 
@@ -49,7 +41,8 @@ export interface Job {
   source: string;
   salary: string;
   url: string;
-  published_at: string | number;
+  published_at: string;
+  published_date: string;
   tags: JobTags;
   modality: JobModality;
   date_scraped: string;

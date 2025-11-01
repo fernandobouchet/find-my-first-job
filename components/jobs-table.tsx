@@ -41,9 +41,9 @@ export const getColumns = (
   handleViewDetails: (job: ScoredJob) => void
 ): ColumnDef<ScoredJob>[] => [
   {
-    accessorKey: "published_at",
+    accessorKey: "published_date",
     header: "Fecha",
-    cell: ({ row }) => <div>{row.getValue("published_at")}</div>,
+    cell: ({ row }) => <div>{row.getValue("published_date")}</div>,
   },
   {
     accessorKey: "title",

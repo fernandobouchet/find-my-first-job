@@ -37,7 +37,7 @@ export function JobCard({ job }: JobCardProps) {
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4" />
-            <span>{job.published_at}</span>
+            <span>{job.published_date}</span>
           </div>
         </div>
 

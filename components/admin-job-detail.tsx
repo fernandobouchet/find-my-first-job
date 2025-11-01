@@ -74,14 +74,10 @@ export function AdminJobDetailModal({
                 </div>
               )}
 
-              {job.published_at && (
+              {job.published_date && (
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">
-                    {typeof job.published_at === "string"
-                      ? job.published_at
-                      : new Date(job.published_at!).toLocaleDateString()}
-                  </span>
+                  <span className="text-sm">{job.published_date}</span>
                 </div>
               )}
             </div>
