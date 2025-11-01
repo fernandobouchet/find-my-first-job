@@ -1,6 +1,5 @@
 import {
   CollectionReference,
-  DocumentData,
   getDocs,
   orderBy,
   query,
@@ -11,12 +10,6 @@ import {
 import { jobsCollection } from "@/lib/firebase/firestore";
 import { Job, ScoredJob } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
-import { toZonedTime } from "date-fns-tz";
-
-const parseFirestoreDate = (date: DocumentData[string]): Date => {
-  if (date?.toDate) return date.toDate();
-  return new Date(date);
-};
 
 const getJobs = async <T>(
   collectionRef: CollectionReference,
@@ -25,61 +18,39 @@ const getJobs = async <T>(
   const constraints: QueryConstraint[] = whereConditions.map((cond) =>
     where(...cond)
   );
-  constraints.push(orderBy("published_at", "desc"));
+  constraints.push(orderBy("published_date", "desc"));
 
   const q = query(collectionRef, ...constraints);
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((doc) => {
     const data = doc.data();
-    const publishedAt = parseFirestoreDate(data.published_at);
     return {
       id: doc.id,
       ...data,
-      published_at: formatDate(publishedAt.toISOString()),
+      published_at: data.published_at.toDate().toISOString(),
+      published_date: formatDate(data.published_date),
     } as T;
   });
 };
 
-const getTodayRange = () => {
-  const timeZone = "America/Argentina/Buenos_Aires";
-  const now = toZonedTime(new Date(), timeZone);
+const getTodayJobs = () => {
+  const todayStr = new Date().toISOString().slice(0, 10);
 
-  const start = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0,
-    0
-  );
-
-  const end = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 1,
-    0,
-    0,
-    0
-  );
-
-  return [start, end];
+  return getJobs<Job>(jobsCollection, [
+    ["score_details.quality_tier", "in", ["excellent", "good"]],
+    ["published_date", "==", todayStr],
+  ]);
 };
 
-const [todayStart, todayEnd] = getTodayRange();
+const getOldJobs = () => {
+  const todayStr = new Date().toISOString().slice(0, 10);
 
-const getTodayJobs = () =>
-  getJobs<Job>(jobsCollection, [
+  return getJobs<Job>(jobsCollection, [
     ["score_details.quality_tier", "in", ["excellent", "good"]],
-    ["published_at", ">=", todayStart],
-    ["published_at", "<", todayEnd],
+    ["published_date", "<", todayStr],
   ]);
-
-const getOldJobs = () =>
-  getJobs<Job>(jobsCollection, [
-    ["score_details.quality_tier", "in", ["excellent", "good"]],
-    ["published_at", "<", todayStart],
-  ]);
+};
 
 const getAllJobs = () => getJobs<ScoredJob>(jobsCollection);
 
