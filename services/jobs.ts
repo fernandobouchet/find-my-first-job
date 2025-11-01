@@ -11,6 +11,7 @@ import {
 import { jobsCollection } from "@/lib/firebase/firestore";
 import { Job, ScoredJob } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
+import { toZonedTime } from "date-fns-tz";
 
 const parseFirestoreDate = (date: DocumentData[string]): Date => {
   if (date?.toDate) return date.toDate();
@@ -40,35 +41,44 @@ const getJobs = async <T>(
   });
 };
 
-const getDateXDaysAgo = (daysAgo: number, timezoneOffset = -3): Date => {
-  const now = new Date();
-  const utcYear = now.getUTCFullYear();
-  const utcMonth = now.getUTCMonth();
-  const utcDate = now.getUTCDate();
+const getTodayRange = () => {
+  const timeZone = "America/Argentina/Buenos_Aires";
+  const now = toZonedTime(new Date(), timeZone);
 
-  const targetDate = new Date(
-    utcYear,
-    utcMonth,
-    utcDate - daysAgo,
-    0 - timezoneOffset,
+  const start = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
     0,
     0,
     0
   );
-  return targetDate;
+
+  const end = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+    0,
+    0,
+    0
+  );
+
+  return [start, end];
 };
+
+const [todayStart, todayEnd] = getTodayRange();
 
 const getTodayJobs = () =>
   getJobs<Job>(jobsCollection, [
     ["score_details.quality_tier", "in", ["excellent", "good"]],
-    ["published_at", ">=", getDateXDaysAgo(0)],
-    ["published_at", "<", getDateXDaysAgo(-1)],
+    ["published_at", ">=", todayStart],
+    ["published_at", "<", todayEnd],
   ]);
 
 const getOldJobs = () =>
   getJobs<Job>(jobsCollection, [
     ["score_details.quality_tier", "in", ["excellent", "good"]],
-    ["published_at", "<", getDateXDaysAgo(-7)],
+    ["published_at", "<", todayStart],
   ]);
 
 const getAllJobs = () => getJobs<ScoredJob>(jobsCollection);
